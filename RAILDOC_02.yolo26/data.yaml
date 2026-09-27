@@ -1,0 +1,13 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 2
+names: ['light_pole', 'tracks_fault']
+
+roboflow:
+  workspace: arunima-saha-okoct
+  project: raildoc_02
+  version: dataset
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/arunima-saha-okoct/raildoc_02/dataset/dataset

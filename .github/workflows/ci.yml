@@ -1,0 +1,206 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: the default token gets no write access.
+permissions:
+  contents: read
+
+# A newer push to the same branch/PR cancels the still-running older run.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  backend-tests:
+    name: Backend tests (pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      # System libs so `import cv2` (opencv-python, not headless) works.
+      # ubuntu-24.04 (ubuntu-latest) renamed libglib2.0-0 → libglib2.0-0t64;
+      # try the new name first, fall back for older images.
+      - name: Install OpenCV system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0t64 \
+            || sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0
+
+      # CPU-only torch first: otherwise pip resolves the multi-GB CUDA wheel.
+      - name: Install CPU-only torch
+        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+      # pytest / pytest-cov are pyproject [dev] extras — NOT in
+      # requirements.txt, so they must be installed explicitly or the
+      # test step dies on import.
+      - name: Install backend dependencies
+        run: pip install -r requirements.txt pytest pytest-cov
+
+      # Fail here (named step) instead of deep inside the suite if the
+      # OpenCV/libGL pairing is broken on the runner image.
+      - name: Verify cv2 import
+        run: python -c "import cv2; print('cv2', cv2.__version__)"
+
+      # No SUPABASE_URL is exported: DB-backed tests self-skip via the
+      # @requires_db marker. Everything else (middleware, rate limiting,
+      # validation, optimizer, CV layer, stress/edge-case suite) runs
+      # offline — same commands as documented in SETUP.md §9.
+      # Report-only coverage for now (deliberately no --cov-fail-under):
+      # a threshold should only be gated once a baseline has actually
+      # been observed on a green run.
+      - name: Run test suite
+        run: >
+          python -m pytest tests/ -v --tb=short
+          --cov=app --cov-report=term-missing --cov-report=xml
+
+      # Publish the report even when the suite fails, so regressions can
+      # be inspected from the run page.
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: backend/coverage.xml
+          if-no-files-found: ignore
+          retention-days: 14
+
+  dataset-validation:
+    name: Dataset validation (RAILDOC_02.yolo26)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install validator dependencies
+        run: pip install PyYAML pillow
+
+      # Verifies image/label pairing per split, YOLO box geometry, class
+      # ranges vs. data.yaml, image decodes, and cross-split duplicates.
+      - name: Validate annotations
+        run: python backend/scripts/validate_dataset.py
+
+  frontend-build:
+    name: Frontend build (tsc + vite)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # No package-lock.json is committed, so npm install (not npm ci).
+      - name: Install dependencies
+        run: npm install --no-fund --no-audit
+
+      # `npm run build` = `tsc -b && vite build` → typecheck + bundle.
+      - name: Typecheck + build
+        run: npm run build
+
+  load-smoke:
+    name: Load smoke test (stress_load.py)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install OpenCV system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0t64 \
+            || sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0
+
+      - name: Install CPU-only torch
+        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Verify cv2 import
+        run: python -c "import cv2; print('cv2', cv2.__version__)"
+
+      - name: Boot backend
+        run: |
+          cd backend
+          nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > /tmp/backend.log 2>&1 &
+          echo $! > /tmp/backend.pid
+
+      - name: Wait for backend health
+        run: |
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:8000/api/health > /dev/null; then
+              echo "backend healthy"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "backend failed to start"
+          tail -n 100 /tmp/backend.log
+          exit 1
+
+      # No Supabase in CI → --db off forces the DB-free traffic mix
+      # (auth, refresh, uploads, live YOLO inference, audit, health).
+      # 429s don't count against the budget; exit code fails the job when
+      # 5xx + transport errors exceed 1% of non-429 requests.
+      # pipefail is required: without it the pipeline's exit code would be
+      # tee's, silently masking a FAIL from the harness.
+      - name: Run load smoke test
+        run: |
+          set -o pipefail
+          cd backend
+          python scripts/stress_load.py --base-url http://127.0.0.1:8000 \
+            --duration 30 --clients 10 --db off --max-5xx-pct 1 | tee /tmp/stress_report.txt
+
+      # Publish the full per-op latency report even on failure, so p95
+      # regressions can be compared across runs. Latency itself is not
+      # gated: shared CI runners are too noisy for a stable p95 threshold.
+      - name: Upload stress report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stress-report
+          path: /tmp/stress_report.txt
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Backend log on failure
+        if: failure()
+        run: tail -n 200 /tmp/backend.log

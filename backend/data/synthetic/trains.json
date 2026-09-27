@@ -1,0 +1,677 @@
+[
+  {
+    "train_id": "EXP-3150",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "14:15",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "RAJ-6328",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "01:30",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "FRE-3213",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "08:45",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "CON-8126",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "19:45",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAS-2467",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "15:15",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAS-3551",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "13:30",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "RAJ-6634",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "16:15",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "FRE-8816",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "00:45",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "PAR-4788",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "13:30",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "MAI-7467",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "13:45",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "OIL-7199",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "23:45",
+    "priority": 2,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-9464",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "13:15",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "EXP-7765",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "20:30",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "DUR-2808",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "04:30",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "EXP-4076",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "22:45",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "DUR-4046",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "01:00",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "EXP-1134",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "04:45",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "DUR-4558",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "00:45",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "EXP-8597",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "15:30",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-5366",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "04:00",
+    "priority": 4,
+    "direction": "Up"
+  },
+  {
+    "train_id": "FRE-4148",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "15:15",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "RAJ-7304",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "03:15",
+    "priority": 4,
+    "direction": "Up"
+  },
+  {
+    "train_id": "OIL-8550",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "01:15",
+    "priority": 1,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SUP-6293",
+    "train_type": "Passenger",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "12:30",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "OIL-5150",
+    "train_type": "Goods",
+    "route": "Delhi-Palwal",
+    "corridor_id": "C-07",
+    "scheduled_time": "17:00",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "MAI-4568",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "11:00",
+    "priority": 1,
+    "direction": "Up"
+  },
+  {
+    "train_id": "COA-1246",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "13:30",
+    "priority": 2,
+    "direction": "Down"
+  },
+  {
+    "train_id": "CON-4982",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "03:45",
+    "priority": 1,
+    "direction": "Up"
+  },
+  {
+    "train_id": "CON-3539",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "22:45",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "MAI-2497",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "05:45",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAR-1979",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "20:00",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "OIL-3061",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "17:00",
+    "priority": 4,
+    "direction": "Up"
+  },
+  {
+    "train_id": "PAS-8187",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "17:30",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "OIL-3207",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "12:30",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SUP-5828",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "22:45",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "MAI-9906",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "18:15",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "OIL-3627",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "14:30",
+    "priority": 1,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SUP-9873",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "09:30",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "RAJ-4039",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "20:45",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAR-6254",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "19:15",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "MAI-3525",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "16:45",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAS-2809",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "13:30",
+    "priority": 1,
+    "direction": "Up"
+  },
+  {
+    "train_id": "RAJ-1512",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "04:15",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SUP-1521",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "06:00",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "COA-1804",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "15:30",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "CON-1214",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "22:00",
+    "priority": 2,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-6913",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "14:00",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAS-5355",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "22:00",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "OIL-2276",
+    "train_type": "Goods",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "02:30",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SHA-9710",
+    "train_type": "Passenger",
+    "route": "Mughal Sarai-Allahabad",
+    "corridor_id": "C-12",
+    "scheduled_time": "23:15",
+    "priority": 4,
+    "direction": "Up"
+  },
+  {
+    "train_id": "MAI-3931",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "16:15",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "OIL-8515",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "03:30",
+    "priority": 4,
+    "direction": "Up"
+  },
+  {
+    "train_id": "DUR-9268",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "05:45",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "FRE-6772",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "19:45",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAS-6299",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "13:45",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "CON-7145",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "17:15",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAS-7505",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "14:45",
+    "priority": 1,
+    "direction": "Up"
+  },
+  {
+    "train_id": "EXP-9480",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "19:00",
+    "priority": 2,
+    "direction": "Down"
+  },
+  {
+    "train_id": "RAJ-4519",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "09:15",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "PAR-9376",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "22:30",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SHA-6827",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "01:45",
+    "priority": 2,
+    "direction": "Up"
+  },
+  {
+    "train_id": "EXP-4817",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "11:15",
+    "priority": 3,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-4562",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "18:45",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAR-8999",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "15:15",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "CON-1612",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "20:30",
+    "priority": 5,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-6700",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "01:30",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-7266",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "07:00",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "FRE-9846",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "01:30",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "PAS-3509",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "16:15",
+    "priority": 1,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SUP-4638",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "19:00",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "PAR-3165",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "12:15",
+    "priority": 3,
+    "direction": "Up"
+  },
+  {
+    "train_id": "SUP-9980",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "18:00",
+    "priority": 4,
+    "direction": "Down"
+  },
+  {
+    "train_id": "SHA-3136",
+    "train_type": "Passenger",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "12:45",
+    "priority": 2,
+    "direction": "Down"
+  },
+  {
+    "train_id": "FRE-7476",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "06:45",
+    "priority": 5,
+    "direction": "Up"
+  },
+  {
+    "train_id": "FRE-4970",
+    "train_type": "Goods",
+    "route": "Nagpur-Bhusawal",
+    "corridor_id": "C-19",
+    "scheduled_time": "19:15",
+    "priority": 1,
+    "direction": "Down"
+  }
+]

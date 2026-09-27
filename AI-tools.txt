@@ -1,0 +1,224 @@
+Modify my existing RailDoc project to change the output of the YOLOv26 railway defect detection interface.
+
+IMPORTANT: Do not replace, retrain, or modify the existing YOLOv26 model. Keep the current image detection and bounding-box functionality exactly as it is. The model must continue detecting the damaged/defective area and drawing the bounding box around it.
+
+I want to completely change what is displayed alongside/under the detected defect.
+
+CURRENT BEHAVIOR:
+
+* Image is processed by YOLOv26.
+* Detected defect is highlighted with a bounding box.
+* The UI currently displays defect percentage/statistics and model confidence percentage.
+
+NEW BEHAVIOR:
+
+* Keep the bounding box highlighting the detected defect.
+* Remove the visible defect percentage/statistics.
+* Remove the visible confidence percentage.
+* Instead, display actionable maintenance information for the detected defect:
+
+  1. Defect type/name
+  2. Required tools/equipment
+  3. Estimated repair/maintenance time
+  4. Human verification/edit controls
+
+The system should conceptually work like:
+
+Image
+→ YOLOv26 detection
+→ Defect type + bounding box
+→ Maintenance Recommendation layer
+→ Required tools + estimated repair time
+→ Human verification/edit
+→ Final maintenance recommendation
+
+DO NOT make YOLO generate the tools or repair time directly. Keep the AI detection layer and maintenance recommendation layer separate.
+
+Create a maintenance recommendation mapping based on the detected defect class. Use a clean, easily editable data structure so additional defect types can be added later.
+
+For example:
+
+rail_surface_damage:
+
+* Rail Grinder
+* Measuring Gauge
+* Safety Kit
+* Estimated time: 2 hr 30 min
+
+rail_crack:
+
+* Rail Welding Machine
+* Ultrasonic Testing Equipment
+* Measuring Gauge
+* Safety Kit
+* Estimated time: 4 hr
+
+missing_fastener:
+
+* Torque Wrench
+* Replacement Fasteners
+* Track Jack
+* Safety Kit
+* Estimated time: 45 min
+
+These are placeholder examples only. First inspect the existing YOLO class names/classes in the project and connect the recommendation mapping to the actual classes already being used. Do not invent different class names when existing ones are available.
+
+UI REQUIREMENTS:
+
+Create a maintenance recommendation card next to or below the detected image.
+
+Example structure:
+
+MAINTENANCE REQUIREMENTS
+
+Defect
+Rail Surface Damage
+
+Required Tools
+• Rail Grinder        [Edit]
+• Measuring Gauge     [Edit]
+• Safety Kit          [Edit]
+
+Estimated Repair Time
+2 hr 30 min
+
+[ Edit Recommendations ]
+
+Each tool must have an edit control.
+
+Clicking Edit on a tool should allow the human operator to:
+
+* Change the tool name
+* Remove the tool
+
+There should also be an "Add Tool" action so the operator can add a missing tool.
+
+The overall recommendation should have an "Edit Recommendations" mode where the operator can:
+
+* Add tools
+* Remove tools
+* Rename tools
+* Change estimated repair time
+* Save the corrected recommendation
+* Cancel changes
+
+HUMAN-IN-THE-LOOP REQUIREMENT:
+
+Do not destroy the original AI-generated recommendation when a human edits it.
+
+Maintain two states:
+
+AI Recommendation
+
+* Original tools generated from the defect mapping
+* Original estimated time
+
+Human Verified Recommendation
+
+* Corrected tools
+* Corrected estimated time
+* Edited/verified state
+
+The UI should make it clear that the recommendation has been human verified after saving.
+
+For example:
+
+AI Recommendation
+Rail Grinder
+Measuring Gauge
+Safety Kit
+Estimated Time: 2 hr 30 min
+
+↓
+
+Human Verified
+Rail Grinder
+Measuring Gauge
+Estimated Time: 1 hr 45 min
+✓ Verified
+
+Keep the internal YOLO confidence score available in the application state/backend if it is already being used, but DO NOT display it in the main maintenance UI.
+
+TECHNICAL REQUIREMENTS:
+
+1. Inspect the existing project before making changes.
+2. Find where YOLOv26 inference results are processed.
+3. Find where the bounding boxes and current confidence/defect statistics are rendered.
+4. Preserve the existing detection and bounding-box rendering.
+5. Replace only the statistics presentation with the maintenance recommendation UI.
+6. Reuse the existing project architecture, components, styling system, state management, API calls, and data models wherever possible.
+7. Do not unnecessarily introduce new libraries.
+8. Do not break the existing image upload/inference workflow.
+9. Make the recommendation mapping modular and easy to expand.
+10. Make the edit functionality persistent within the current detection/session.
+11. Handle unknown defect classes gracefully by showing:
+    "Maintenance recommendation unavailable"
+    and allow the operator to manually add tools and estimated time.
+12. Add sensible loading, empty, and error states.
+13. Make the UI responsive for desktop/tablet resolutions.
+14. Keep the design consistent with the existing RailDoc UI. Do not redesign the entire application.
+
+DATA STRUCTURE:
+
+Use a structure similar to:
+
+{
+defectType: {
+tools: [],
+estimatedTime: ""
+}
+}
+
+For a detection, maintain something conceptually like:
+
+{
+defectType: "...",
+bbox: [...],
+confidence: ...,
+aiRecommendation: {
+tools: [...],
+estimatedTime: "..."
+},
+humanVerifiedRecommendation: {
+tools: [...],
+estimatedTime: "...",
+verified: false
+}
+}
+
+Do not remove confidence from internal data if other parts of the application depend on it. Only remove it from the user-facing maintenance interface.
+
+IMPORTANT SAFETY/UX DETAIL:
+
+This is a railway maintenance planning interface. The recommendation must be presented as an AI-generated suggestion that requires human verification, not as an unquestionable instruction.
+
+Use wording such as:
+"AI Maintenance Recommendation"
+"Requires Human Verification"
+
+After the user edits and saves:
+"Human Verified"
+
+IMPLEMENTATION PROCESS:
+
+Before changing anything:
+
+* inspect the repository structure
+* identify the YOLOv26 inference code
+* identify the detection result type/interface
+* identify the current statistics UI component
+* identify the existing styling/components
+
+Then implement the changes with the smallest reasonable set of modifications.
+
+After implementation:
+
+* run the existing build/test/lint commands
+* fix any errors caused by the changes
+* verify that the original YOLO detection and bounding boxes still work
+* verify that confidence/percentage statistics are no longer shown in the main UI
+* verify that tools and estimated time appear correctly
+* verify that tools can be edited, added, removed, and saved
+* verify that human verification does not overwrite the original AI recommendation
+
+Do not create a mock/demo implementation disconnected from the real YOLOv26 inference flow. Connect the new UI to the actual detection data already present in this project.

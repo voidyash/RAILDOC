@@ -1,0 +1,170 @@
+[
+  {
+    "window_id": "BW-001",
+    "corridor_id": "C-07",
+    "start_time": "03:00",
+    "end_time": "05:00",
+    "block_type": "Block",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-002",
+    "corridor_id": "C-07",
+    "start_time": "02:00",
+    "end_time": "04:00",
+    "block_type": "Block",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-003",
+    "corridor_id": "C-07",
+    "start_time": "00:00",
+    "end_time": "02:00",
+    "block_type": "Block",
+    "day_of_week": 2
+  },
+  {
+    "window_id": "BW-004",
+    "corridor_id": "C-07",
+    "start_time": "10:00",
+    "end_time": "11:00",
+    "block_type": "Possession",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-005",
+    "corridor_id": "C-07",
+    "start_time": "15:00",
+    "end_time": "16:00",
+    "block_type": "Possession",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-006",
+    "corridor_id": "C-07",
+    "start_time": "20:00",
+    "end_time": "22:00",
+    "block_type": "Lines Up",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-007",
+    "corridor_id": "C-07",
+    "start_time": "20:00",
+    "end_time": "22:00",
+    "block_type": "Lines Up",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-008",
+    "corridor_id": "C-12",
+    "start_time": "02:00",
+    "end_time": "04:00",
+    "block_type": "Block",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-009",
+    "corridor_id": "C-12",
+    "start_time": "01:00",
+    "end_time": "03:00",
+    "block_type": "Block",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-010",
+    "corridor_id": "C-12",
+    "start_time": "02:00",
+    "end_time": "04:00",
+    "block_type": "Block",
+    "day_of_week": 2
+  },
+  {
+    "window_id": "BW-011",
+    "corridor_id": "C-12",
+    "start_time": "14:00",
+    "end_time": "15:00",
+    "block_type": "Possession",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-012",
+    "corridor_id": "C-12",
+    "start_time": "10:00",
+    "end_time": "11:00",
+    "block_type": "Possession",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-013",
+    "corridor_id": "C-12",
+    "start_time": "20:00",
+    "end_time": "22:00",
+    "block_type": "Lines Up",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-014",
+    "corridor_id": "C-12",
+    "start_time": "06:00",
+    "end_time": "08:00",
+    "block_type": "Lines Up",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-015",
+    "corridor_id": "C-19",
+    "start_time": "02:00",
+    "end_time": "04:00",
+    "block_type": "Block",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-016",
+    "corridor_id": "C-19",
+    "start_time": "03:00",
+    "end_time": "05:00",
+    "block_type": "Block",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-017",
+    "corridor_id": "C-19",
+    "start_time": "01:00",
+    "end_time": "03:00",
+    "block_type": "Block",
+    "day_of_week": 2
+  },
+  {
+    "window_id": "BW-018",
+    "corridor_id": "C-19",
+    "start_time": "15:00",
+    "end_time": "16:00",
+    "block_type": "Possession",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-019",
+    "corridor_id": "C-19",
+    "start_time": "10:00",
+    "end_time": "11:00",
+    "block_type": "Possession",
+    "day_of_week": 1
+  },
+  {
+    "window_id": "BW-020",
+    "corridor_id": "C-19",
+    "start_time": "06:00",
+    "end_time": "08:00",
+    "block_type": "Lines Up",
+    "day_of_week": 0
+  },
+  {
+    "window_id": "BW-021",
+    "corridor_id": "C-19",
+    "start_time": "06:00",
+    "end_time": "08:00",
+    "block_type": "Lines Up",
+    "day_of_week": 1
+  }
+]

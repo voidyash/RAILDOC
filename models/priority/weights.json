@@ -1,0 +1,50 @@
+{
+  "description": "Configurable priority scoring weights for maintenance task ranking",
+  "version": "1.0.0",
+  "weights": {
+    "asset_criticality": 0.30,
+    "failure_risk": 0.25,
+    "overdue_factor": 0.20,
+    "train_impact": 0.15,
+    "safety_criticality": 0.10
+  },
+  "normalization": {
+    "method": "min_max",
+    "min": 0.0,
+    "max": 100.0
+  },
+  "overdue_factor": {
+    "method": "logarithmic",
+    "scale": "log1p",
+    "max_days": 30
+  },
+  "priority_levels": {
+    "critical": { "min_score": 80, "color": "red" },
+    "high":     { "min_score": 60, "color": "orange" },
+    "medium":   { "min_score": 40, "color": "yellow" },
+    "low":      { "min_score": 0,  "color": "green" }
+  },
+  "scenarios": {
+    "safety_focused": {
+      "asset_criticality": 0.20,
+      "failure_risk": 0.20,
+      "overdue_factor": 0.15,
+      "train_impact": 0.10,
+      "safety_criticality": 0.35
+    },
+    "operational_focus": {
+      "asset_criticality": 0.25,
+      "failure_risk": 0.20,
+      "overdue_factor": 0.15,
+      "train_impact": 0.30,
+      "safety_criticality": 0.10
+    },
+    "maintenance_heavy": {
+      "asset_criticality": 0.35,
+      "failure_risk": 0.30,
+      "overdue_factor": 0.25,
+      "train_impact": 0.05,
+      "safety_criticality": 0.05
+    }
+  }
+}

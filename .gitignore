@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.installed.cfg
+
+# Build
+dist/
+build/
+*.egg
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Synthetic data (generated, not committed)
+data/synthetic/*.json
+
+# Ultralytics training caches
+**/labels.cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Python
+*.pyc
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+
+# Docker
+docker-compose.override.yml

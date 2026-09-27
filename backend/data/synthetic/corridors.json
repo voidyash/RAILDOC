@@ -1,0 +1,20 @@
+[
+  {
+    "corridor_id": "C-07",
+    "name": "Delhi-Mumbai Main Line",
+    "section": "Delhi-Palwal",
+    "capacity": 2
+  },
+  {
+    "corridor_id": "C-12",
+    "name": "Howrah-Delhi Line",
+    "section": "Mughal Sarai-Allahabad",
+    "capacity": 2
+  },
+  {
+    "corridor_id": "C-19",
+    "name": "Chennai-Mumbai Line",
+    "section": "Nagpur-Bhusawal",
+    "capacity": 2
+  }
+]

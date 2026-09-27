@@ -1,0 +1,92 @@
+{
+  "description": "Optimization objectives for the block planner",
+  "version": "1.0.0",
+  "maximize": [
+    {
+      "id": "O01",
+      "name": "Asset Availability",
+      "formula": "available_asset_time / total_required_asset_time * 100",
+      "weight": 0.30,
+      "description": "Maximize the percentage of time assets are available for operations"
+    },
+    {
+      "id": "O02",
+      "name": "Critical Task Completion",
+      "formula": "critical_tasks_in_plan / total_critical_tasks",
+      "weight": 0.25,
+      "description": "Maximize the proportion of high-priority tasks that get scheduled"
+    },
+    {
+      "id": "O03",
+      "name": "Block Utilization",
+      "formula": "sum(task_duration_in_block) / sum(block_duration) * 100",
+      "weight": 0.25,
+      "description": "Maximize the fraction of each block that is actively used for maintenance"
+    },
+    {
+      "id": "O04",
+      "name": "Multi-Department Coordination",
+      "formula": "blocks_with_multiple_departments / total_blocks",
+      "weight": 0.20,
+      "description": "Maximize the number of blocks where multiple departments coordinate"
+    }
+  ],
+  "minimize": [
+    {
+      "id": "O05",
+      "name": "Asset Downtime",
+      "formula": "sum(block_duration * affected_assets)",
+      "weight": 0.25,
+      "description": "Minimize the total time assets are unavailable"
+    },
+    {
+      "id": "O06",
+      "name": "Train Disruption",
+      "formula": "sum(train_conflicts * disruption_minutes_per_conflict)",
+      "weight": 0.25,
+      "description": "Minimize the impact on scheduled train operations"
+    },
+    {
+      "id": "O07",
+      "name": "Number of Blocks",
+      "formula": "count(generated_blocks)",
+      "weight": 0.20,
+      "description": "Minimize the total number of separate maintenance blocks"
+    },
+    {
+      "id": "O08",
+      "name": "Unused Capacity",
+      "formula": "sum(block_duration - task_duration) for each block",
+      "weight": 0.15,
+      "description": "Minimize wasted time in each maintenance block"
+    },
+    {
+      "id": "O09",
+      "name": "Maintenance Backlog",
+      "formula": "total_tasks - scheduled_tasks",
+      "weight": 0.10,
+      "description": "Minimize the number of unscheduled maintenance tasks"
+    },
+    {
+      "id": "O10",
+      "name": "Conflicting Activities",
+      "formula": "count(conflict_pairs)",
+      "weight": 0.05,
+      "description": "Minimize the number of activities that conflict with each other"
+    }
+  ],
+  "weight_presets": {
+    "balanced": {
+      "maximize": { "O01": 0.30, "O02": 0.25, "O03": 0.25, "O04": 0.20 },
+      "minimize": { "O05": 0.25, "O06": 0.25, "O07": 0.20, "O08": 0.15, "O09": 0.10, "O10": 0.05 }
+    },
+    "availability_focused": {
+      "maximize": { "O01": 0.50, "O02": 0.20, "O03": 0.20, "O04": 0.10 },
+      "minimize": { "O05": 0.40, "O06": 0.20, "O07": 0.15, "O08": 0.15, "O09": 0.05, "O10": 0.05 }
+    },
+    "train_operations_focused": {
+      "maximize": { "O01": 0.20, "O02": 0.20, "O03": 0.20, "O04": 0.40 },
+      "minimize": { "O05": 0.15, "O06": 0.45, "O07": 0.20, "O08": 0.10, "O09": 0.05, "O10": 0.05 }
+    }
+  }
+}

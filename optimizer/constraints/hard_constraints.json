@@ -1,0 +1,106 @@
+{
+  "description": "Hard constraints that must be satisfied by all generated block plans",
+  "version": "1.0.0",
+  "constraints": [
+    {
+      "id": "C01",
+      "name": "Train Timetable",
+      "description": "Maintenance blocks must not overlap with scheduled train movements",
+      "type": "temporal",
+      "severity": "hard",
+      "check": "no_train_conflict"
+    },
+    {
+      "id": "C02",
+      "name": "Corridor Availability",
+      "description": "Each corridor has defined available windows for maintenance",
+      "type": "spatial",
+      "severity": "hard",
+      "check": "corridor_available"
+    },
+    {
+      "id": "C03",
+      "name": "Block Availability",
+      "description": "Only use officially declared block windows",
+      "type": "temporal",
+      "severity": "hard",
+      "check": "block_type_compatible"
+    },
+    {
+      "id": "C04",
+      "name": "Track Occupancy",
+      "description": "No two maintenance activities can occupy the same track simultaneously",
+      "type": "spatial",
+      "severity": "hard",
+      "check": "no_track_overlap"
+    },
+    {
+      "id": "C05",
+      "name": "Maintenance Duration",
+      "description": "Each task must be assigned a block with sufficient duration",
+      "type": "temporal",
+      "severity": "hard",
+      "check": "duration_sufficient"
+    },
+    {
+      "id": "C06",
+      "name": "Resource Availability",
+      "description": "Required personnel and equipment must be available during the block",
+      "type": "resource",
+      "severity": "hard",
+      "check": "resources_available"
+    },
+    {
+      "id": "C07",
+      "name": "Safety Requirements",
+      "description": "All safety prerequisites must be met before task execution",
+      "type": "safety",
+      "severity": "hard",
+      "check": "safety_requirements_satisfied"
+    },
+    {
+      "id": "C08",
+      "name": "Isolation Requirements",
+      "description": "Tasks requiring power/track isolation cannot overlap with live operations",
+      "type": "safety",
+      "severity": "hard",
+      "check": "isolation_requirements_satisfied"
+    },
+    {
+      "id": "C09",
+      "name": "Task Dependencies",
+      "description": "Dependent tasks must be executed in the correct order",
+      "type": "temporal",
+      "severity": "hard",
+      "check": "dependencies_satisfied"
+    },
+    {
+      "id": "C10",
+      "name": "Operational Restrictions",
+      "description": "Divisional and zone-level operational restrictions must be respected",
+      "type": "operational",
+      "severity": "hard",
+      "check": "operational_restrictions_met"
+    },
+    {
+      "id": "C11",
+      "name": "Safety Conflict",
+      "description": "Tasks with conflicting safety requirements cannot share a block",
+      "type": "safety",
+      "severity": "hard",
+      "check": "no_safety_conflict",
+      "conflicting_pairs": [
+        ["Power Block Required", "Lines Up"],
+        ["Track Isolation", "Power Block Required"]
+      ]
+    },
+    {
+      "id": "C12",
+      "name": "Isolation Exclusivity",
+      "description": "At most one isolation-required task per block",
+      "type": "safety",
+      "severity": "hard",
+      "check": "single_isolation_per_block"
+    }
+  ]
+}

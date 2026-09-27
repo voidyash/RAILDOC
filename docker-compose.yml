@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - RAILDOC_MODEL_DIR=/models
+    volumes:
+      - ./data:/app/data
+      # Trained YOLO weights — mounted read-only so the image stays small
+      # and you can swap weights without rebuilding.
+      - ./models:/models:ro
+      # Training dataset (RAILDOC_02.yolo26) is only needed for retraining
+      # on the host, not in the container.
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

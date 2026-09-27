@@ -1,0 +1,39 @@
+{
+  "description": "OR-Tools CP-SAT solver configuration for block optimization",
+  "version": "1.0.0",
+  "solver": {
+    "type": "cp_sat",
+    "library": "google-or-tools",
+    "parameters": {
+      "max_time_in_seconds": 30,
+      "num_workers": 4,
+      "log_search_progress": false,
+      "enumerate_all_solutions": false
+    }
+  },
+  "heuristic": {
+    "type": "greedy_packing",
+    "strategy": "priority_first",
+    "description": "Greedy task packing by priority with constraint checking",
+    "packing": {
+      "fill_threshold": 0.70,
+      "description": "Stop packing a block when 70% of available time is used"
+    },
+    "compatibility_check": {
+      "safety_conflicts": true,
+      "isolation_exclusivity": true,
+      "dependency_order": true,
+      "resource_overlap": false
+    }
+  },
+  "fallback": {
+    "strategy": "greedy",
+    "note": "If CP-SAT times out, fall back to greedy heuristic"
+  },
+  "scaling": {
+    "max_tasks": 500,
+    "max_blocks": 100,
+    "max_trains": 200,
+    "note": "For larger datasets, consider decomposing by corridor"
+  }
+}

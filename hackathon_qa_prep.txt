@@ -1,0 +1,383 @@
+BLOCK PLANNER — HACKATHON Q&A PREP
+=====================================
+A guide to likely judge questions and honest, defensible answers.
+Read this together as a team before the demo — everyone should be able to
+answer the "expect this to get pushed hard" questions the same way.
+
+
+SECTION 1: THE PROBLEM / DOMAIN
+=====================================
+
+Q: What real railway problem does this solve, and for whom?
+A: It solves maintenance block planning — deciding which maintenance tasks
+   get scheduled into which track possession windows, across multiple
+   departments (Engineering, Traction, S&T/Signals), while minimizing
+   train disruption. It's aimed at the planners/supervisors who currently
+   coordinate this manually across departments.
+
+Q: How is this done today without your tool, and what's the actual pain?
+A: Answer honestly based on your team's research. If you don't have a
+   verified answer, say: "We believe the current process is largely manual
+   coordination between department planners, which creates two problems:
+   (1) departments schedule blocks independently, missing opportunities to
+   combine work into fewer possessions, and (2) prioritization is
+   inconsistent/experience-based rather than data-driven." Don't claim
+   specifics you haven't verified with a real railway stakeholder.
+
+Q: Why 3 corridors / this specific scale — is it representative of a real
+   network, or arbitrary?
+A: It's a representative subset chosen to demonstrate the approach at a
+   scale a judge can inspect and reason about. It is not derived from a
+   specific real network's topology. The algorithm is not hardcoded to 3
+   corridors — it groups tasks/windows by whatever corridor_id values
+   exist in the data, so it generalizes.
+
+Q: What's your source for the domain rules (block types, safety
+   requirement conflicts, department names)?
+A: Be honest here. If these were inferred/invented for the prototype
+   rather than sourced from a domain expert or official documentation,
+   say so directly: "These rules were our best approximation based on
+   [research/publicly available info/assumptions], not validated by a
+   railway safety expert. That validation would be a necessary next step
+   before any real deployment."
+
+
+SECTION 2: PRIORITY SCORING
+=====================================
+
+Q: Why these exact weights — 30% asset criticality, 25% failure risk,
+   20% overdue factor, 15% train impact, 10% safety criticality?
+A: If you have real justification (stakeholder input, research), lead
+   with it. Otherwise be honest: "These are reasoned defaults reflecting
+   that asset criticality and failure risk should dominate the score,
+   with safety criticality weighted lower because in our model most
+   safety-critical tasks already surface as high-criticality or
+   high-risk anyway. Critically, the weights aren't hardcoded — they're
+   stored in a priority_weights table and are meant to be tuned by
+   domain experts for their specific network." Do NOT claim these came
+   from real operational data unless they actually did.
+
+Q: Why logarithmic scaling for the overdue factor, and why cap at 30 days?
+A: log1p(days_overdue) / log1p(30) means the first few overdue days
+   matter a lot (steep early slope) and additional overdue days matter
+   progressively less — the idea being that "14 days overdue" should
+   score meaningfully higher than "1 day overdue," but "60 days overdue"
+   shouldn't dwarf everything else in the formula. The 30-day cap sets
+   the scale of "maximally urgent" for normalization purposes; it's a
+   modeling choice, not derived from a real overdue-risk curve.
+
+Q: If I change the weights in the UI, does that actually change the
+   generated plan, or just redraw a number?
+A: Verify this yourself before the demo. Trace it: priority_weights →
+   calculate_priority_score() → task.priority_score → does the optimizer
+   re-run using updated scores, and does the frontend re-fetch and
+   re-render the new plan? If any part of that chain is broken, either
+   fix it or don't claim it works live.
+
+Q: How would you validate this scoring model is actually good?
+A: Honestly: "We don't have ground truth (real incident/outcome data) to
+   validate against yet. In a real deployment, we'd want to backtest the
+   scoring against historical incidents — does a high priority_score
+   correlate with tasks that, when delayed, actually led to failures or
+   safety events?" This is a legitimate and expected limitation to admit.
+
+
+SECTION 3: THE OPTIMIZER (BLOCK PACKING)
+=====================================
+*** THIS IS THE SECTION MOST LIKELY TO GET PUSHED HARD. READ CAREFULLY. ***
+
+IMPORTANT CONTEXT FOR THE TEAM: block_optimizer.py currently instantiates
+an OR-Tools CpModel and CpSolver in __init__(), but optimize() does NOT
+use them — it runs a greedy heuristic (sort by priority, pack tasks into
+windows corridor-by-corridor). If your pitch materials say "constraint
+programming" or "CP-SAT optimization," this is a gap a technical judge
+can find by reading the code for 30 seconds. Decide as a team, before
+the demo, whether to (a) actually wire up CP-SAT, or (b) adjust your
+pitch language to accurately describe a greedy heuristic. Below assumes
+you go with an honest answer either way.
+
+Q: You mention OR-Tools/CP-SAT — walk me through where the constraint
+   model is actually solved.
+A (if not fixed by demo time): "We instantiate the CP-SAT solver as part
+   of our architecture, but the current packing algorithm is a greedy
+   heuristic: sort pending tasks by priority score, then for each
+   corridor's block windows, greedily pack the highest-priority
+   compatible tasks until the window is ~70% full. We chose greedy first
+   because it's fast and predictable at this scale, with CP-SAT as the
+   natural next step for finding provably better solutions, especially
+   as constraints grow more complex."
+A (if fixed by demo time): describe the actual CP-SAT formulation —
+   variables, constraints, objective — accurately.
+
+Q: Is your packing algorithm provably optimal, or just a reasonable
+   heuristic? What guarantees does it give?
+A: No optimality guarantee. It's a greedy, priority-ordered heuristic.
+   It will not backtrack — once a task is assigned to a window, that
+   decision is final even if a later, better combination becomes
+   apparent. This is a real limitation worth stating plainly.
+
+Q: How do you know the greedy approach doesn't leave easy wins on the
+   table?
+A: We haven't benchmarked it against an exact solver (e.g., running the
+   same instance through CP-SAT and comparing task-completion counts or
+   utilization). That comparison is a natural validation step we'd want
+   to do before claiming the plan is "optimized" rather than "improved."
+
+Q: Your compatibility check only hardcodes two conflicting safety-
+   requirement pairs (Power Block Required + Lines Up, Track Isolation +
+   Power Block Required). Where did those come from, and what about
+   combinations you haven't hardcoded?
+A: These were illustrative examples of real conflict types (you can't
+   run two mutually exclusive access modes in the same block), not an
+   exhaustive, expert-verified conflict matrix. A real system would need
+   a domain-expert-authored compatibility matrix, not two hardcoded
+   tuples.
+
+Q: What's your algorithm's time complexity, and how does it scale?
+A: For each corridor, tasks are sorted (O(n log n)) and then, for each
+   window, we iterate the remaining eligible tasks once (roughly
+   O(windows * tasks) per corridor in the worst case, since eligible
+   tasks are filtered by not-yet-assigned each time). At 300 tasks and a
+   few windows per corridor this is fast (sub-second); it has not been
+   tested at national-network scale (thousands of tasks/corridors).
+
+Q: What happens to a task that can't fit any window — a corridor with
+   tasks but no compatible windows?
+A: It's silently dropped from that planning cycle (the loop just
+   `continue`s past corridors with no windows, and tasks that don't fit
+   simply aren't selected). It remains "Pending" and should reappear in
+   the next planning cycle. In a safety-critical context, silently
+   dropping a task without surfacing it as "could not be scheduled" is a
+   real gap — flag this as a known limitation rather than pretend the
+   system handles it gracefully today.
+
+Q: How do train conflicts actually reduce available block time?
+A: If the number of conflicting trains exceeds window_duration // 30, we
+   reserve 15 minutes per conflicting train off the top of the window's
+   available duration before packing tasks. This is a simplification
+   (real conflict resolution would need actual train movement windows,
+   not just a flat per-train time penalty).
+
+
+SECTION 4: DATA — IS IT REAL?
+=====================================
+
+Q: Is any of this real railway data, or synthetic?
+A: It's synthetic, generated by our own data generator (data_generator.py
+   / seed.py) to produce a realistic-looking but fabricated dataset of
+   assets, tasks, trains, and corridors. Be upfront and immediate about
+   this if asked directly — don't let a judge "catch" it.
+
+Q: How did you validate the synthetic data is realistic?
+A: Be honest about your process — e.g., "we chose distributions and
+   value ranges (criticality, failure rates, durations) that felt
+   plausible based on [whatever research you did], but we have not
+   validated them against real operational data."
+
+Q: What happens with messy/incomplete real-world data — missing due
+   dates, conflicting dependencies, duplicate IDs?
+A: Currently, minimal defensive handling — the models assume reasonably
+   clean input (see app/core/validation.py for what is validated). This
+   is a known gap for production readiness: real data pipelines are
+   messier than generated data.
+
+
+SECTION 5: INTEGRATIONS
+=====================================
+
+IMPORTANT CONTEXT: app/integrations/coa, smms, tdms, and tms are EMPTY
+stub folders (just blank __init__.py files). If your pitch mentions
+integrating with real Track Management (TMS), Signal & Telecom
+Management (SMMS), Traction Distribution (TDMS), or Corridor/Ops
+Authority (COA) systems, be ready for this exact question:
+
+Q: Show me the actual integration code for [TMS/SMMS/TDMS/COA].
+A: "These are placeholder modules representing planned integration
+   points in our architecture — they are not implemented. Our current
+   prototype uses generated/seeded data in place of live feeds from
+   these systems." Do not imply these are functional if asked directly.
+
+Q: What would a real integration with one of these systems actually
+   require?
+A: Authentication/access agreements with the system owner, agreed data
+   formats (likely not REST/JSON — many railway ops systems use older
+   protocols or batch exports), handling latency and stale data, and
+   clarity on who owns data-quality issues when they occur. This is a
+   good question to have a thoughtful answer to even without code,
+   since it shows you understand deployment is harder than the demo.
+
+
+SECTION 6: AUTH / SECURITY
+=====================================
+
+Q: Explain your auth flow.
+A: JWT-based: /api/auth/login issues a short-lived access token (30 min
+   default) and a longer-lived refresh token (7 days default), both
+   HS256-signed(symmetric signing algorithm that uses HMAC combined with SHA-256 to create and verify JSON 
+   Web Tokens (JWTs)). Protected endpoints use a FastAPI dependency
+   (get_authenticated_user) that decodes and validates the bearer token.
+   Role-based access (admin/planner/operations/engineer/viewer) is
+   enforced via require_roles() dependencies on specific endpoints (e.g.
+   only admins can create users).
+
+Q: What happens to sessions when the server restarts?
+A: This was a real bug we hit and fixed: JWT_SECRET_KEY defaults to a
+   randomly generated value if not set in the environment, which means
+   every restart invalidates all previously issued tokens (signature
+   verification fails). We fixed this by pinning a stable secret in the
+   environment config, so tokens now survive restarts/reloads. (Good
+   story if asked "what's a real bug you hit and fixed" — this one has
+   a clean before/after.)
+
+Q: Your MOCK_USERS store is in-memory — what happens to created users on
+   restart?
+A: They reset to the 5 default seeded users (admin, planner, operations,
+   engineer, viewer) every restart, since there's no persistent user
+   store. This is acceptable for a demo but is a known limitation —
+   production would need users persisted in the database, not an
+   in-memory dict.
+
+Q: Rate limiting is in-memory per-process — how does this behave with
+   multiple backend instances (horizontal scaling)?
+A: It doesn't share state across instances — each process has its own
+   independent rate-limit counters, so real enforced limits under a
+   load-balanced multi-instance deployment would need a shared store
+   (e.g., Redis), not the current in-memory approach.
+
+Q: Why sha256_crypt instead of bcrypt/argon2 for password hashing?
+A: The code comment says "for better compatibility." If pushed, be
+   honest that bcrypt/argon2 are generally considered the stronger
+   modern choices for password hashing, and sha256_crypt was likely
+   chosen to avoid a native-dependency install issue during development
+   rather than for security reasons. Acknowledging this rather than
+   defending it as a deliberate security choice will read better to a
+   judge with security background.
+
+Q: Where do secrets live — is the Supabase service key (write-capable)
+   ever exposed client-side?
+A: Verify this yourselves before the demo: SUPABASE_SERVICE_KEY should
+   only ever be used server-side (backend .env), never shipped to the
+   frontend bundle. The anon key is safe to expose client-side as long
+   as Row Level Security policies on the Supabase tables are correctly
+   locked down — confirm your RLS policies actually restrict access
+   appropriately, since the anon key alone is enough to query any table
+   without RLS.
+
+
+SECTION 7: ARCHITECTURE / SCALE
+=====================================
+
+Q: Why Supabase/Postgres via REST (PostgREST) rather than a direct DB
+   connection?
+A: Faster to stand up for a hackathon timeline, gives free REST/CRUD
+   generation, built-in auth/RLS primitives, and no need to manage a
+   database connection pool ourselves. Tradeoff: an extra network hop
+   per query versus a direct DB connection, and dependency on
+   Supabase's availability/latency.
+
+Q: Walk through what happens on a dashboard load.
+A: The backend fires concurrent requests (via a thread pool) to fetch
+   tasks, blocks, and assets from Supabase in parallel, then assembles
+   them into a single dashboard response. We initially had these on
+   separate ad-hoc HTTP connections per call; we fixed this to use a
+   single shared, connection-pooled httpx.Client to avoid connection
+   contention under concurrent load (this was a real timeout bug we
+   diagnosed and fixed — good story if asked about debugging).
+
+Q: Why threads instead of native async/await, given FastAPI is
+   async-first?
+A: Honest answer: the current data layer uses a synchronous httpx
+   client called via a ThreadPoolExecutor inside sync endpoints (which
+   FastAPI itself runs in its own threadpool), rather than an async
+   httpx client with native async/await. This works but isn't the
+   idiomatic FastAPI pattern — a fully async rewrite (async
+   httpx.AsyncClient, async endpoint functions) would be more scalable
+   and is a reasonable improvement to name if asked about future work.
+
+Q: How would this scale to a full national network (thousands of assets,
+   corridors)?
+A: The greedy optimizer's complexity and the synchronous per-request
+   Supabase calls are the two components most likely to need rework —
+   the optimizer for algorithmic scale, and the data layer for
+   concurrency/caching. Neither has been load-tested beyond the ~300
+   task demo dataset.
+
+Q: What's a real bug you hit while building this?
+A: Tell the Supabase concurrent-timeout story and the JWT-secret-
+   regeneration story — both are genuine, diagnosed-and-fixed bugs with
+   clear before/after explanations (see Sections 6 and 7 above). These
+   make for much stronger answers than a rehearsed generic one, because
+   you can actually explain the root cause.
+
+
+SECTION 8: EXPLAINABILITY / "AI" CLAIMS
+=====================================
+
+Q: You call this "explainable AI" / "AI-driven prioritization" — walk me
+   through the model.
+A: Be precise here — this is a common judge trap. There is no trained
+   machine learning model in this system. Priority scores come from a
+   fixed weighted formula (Section 2) over input fields, and the
+   "explanation" text is a template that fills in which of those fields
+   crossed a threshold (e.g., "High failure risk: 90.9%" if
+   failure_risk >= 70). This is a rule-based, transparent scoring
+   system — which is a legitimate and often preferable design for a
+   safety-critical domain (auditable, deterministic, no black box) — but
+   it is not machine learning, and you should not describe it as such if
+   directly asked whether there's a trained model involved.
+
+Q: Is there any actual ML anywhere (failure prediction, anomaly
+   detection)?
+A: If none exists yet: say so plainly, and note that failure_risk is
+   currently an input field in the seeded/synthetic data rather than a
+   predicted value — a real predictive-maintenance model (e.g., trained
+   on sensor/inspection history to estimate failure_risk) would be a
+   natural and valuable extension, but isn't built.
+
+
+SECTION 9: PRACTICAL / DEMO-DAY
+=====================================
+
+Q: What's the actual novel contribution here versus existing scheduling
+   / CMMS (Computerized Maintenance Management System) tools?
+A: Prepare this as a team — be specific about what's different: is it
+   the multi-department coordination into shared blocks? The priority
+   transparency? The what-if simulation? Don't answer vaguely with
+   "it's all-in-one" — name the 1-2 things that are actually distinct.
+
+Q: What did you not have time to build, and what's your roadmap?
+A: Have an honest, prioritized list ready — e.g., real CP-SAT
+   optimization, real system integrations, ML-based failure prediction,
+   persistent user management, load testing at scale. Judges respond
+   well to a clear-eyed roadmap more than to claims that everything is
+   finished.
+
+Q: If something breaks live on stage (e.g., a timeout or auth error),
+   what's your fallback?
+A: Decide and rehearse this as a team before demo day: do you have
+   cached/pre-loaded data you can fall back to, a graceful error state
+   in the UI rather than a blank screen, or a recorded backup demo video
+   as a last resort? Given you've already hit both a blank-screen crash
+   bug and an auth-401 bug once each, treat "what if it happens again on
+   stage" as a real risk to plan for, not a hypothetical.
+
+
+SECTION 10: QUICK-REFERENCE — KNOWN GAPS TO BE UPFRONT ABOUT
+=====================================
+(If a judge finds these by reading code, "yes, we know, here's why /
+here's the plan" lands far better than getting caught off guard.)
+
+1. block_optimizer.py sets up OR-Tools CP-SAT but never uses it — actual
+   packing is a greedy heuristic.
+2. app/integrations/{coa,smms,tdms,tms} are empty stub folders — no real
+   system integrations exist.
+3. All data is synthetic/generated, not real railway operational data.
+4. MOCK_USERS is in-memory and resets to 5 default users on every
+   restart.
+5. Rate limiting is in-memory per-process, won't work correctly across
+   multiple scaled instances.
+6. Priority "explanations" are template text based on thresholds, not
+   output from a trained model — there is no ML in the system currently.
+7. Password hashing uses sha256_crypt rather than bcrypt/argon2.
+8. The optimizer silently drops tasks that don't fit any window rather
+   than surfacing them as "could not schedule."

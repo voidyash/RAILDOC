@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RailDoc</title>
+    <meta
+      name="description"
+      content="RailDoc — railway maintenance planning and scheduling. Coordinates Engineering, S&T, and Traction work into optimized maintenance blocks."
+    />
+    <meta name="theme-color" content="#475569" />
+    <script>
+      // Apply saved/system theme before first paint to avoid a flash of light mode.
+      (function () {
+        try {
+          var stored = localStorage.getItem('raildoc-theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RailDoc" />
+    <meta property="og:title" content="RailDoc" />
+    <meta
+      property="og:description"
+      content="Railway maintenance planning and scheduling — coordinated blocks, fewer conflicts."
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Training runs (weights are copied to <project>/models separately)
+runs/
+
+# Logs and local artifacts
+logs/
+*.log
+
+# Env / secrets — mounted or injected at runtime
+.env
+
+# Scrap / temp
+test_img.jpg
+*.json.tmp

@@ -1,0 +1,34 @@
+{
+  "description": "Failure risk prediction model configuration for asset maintenance",
+  "version": "1.0.0",
+  "model_type": "gradient_boosting",
+  "features": [
+    "asset_criticality",
+    "historical_failure_rate",
+    "days_since_last_maintenance",
+    "asset_age_years",
+    "environmental_exposure",
+    "usage_intensity",
+    "maintenance_compliance"
+  ],
+  "feature_descriptions": {
+    "asset_criticality": "How critical the asset is to operations (0-100)",
+    "historical_failure_rate": "Past failure frequency per year",
+    "days_since_last_maintenance": "Days since last maintenance activity",
+    "asset_age_years": "Asset age in years",
+    "environmental_exposure": "Exposure to weather, vibration, corrosion (0-100)",
+    "usage_intensity": "How heavily the asset is used (0-100)",
+    "maintenance_compliance": "Percentage of scheduled maintenance completed"
+  },
+  "output": {
+    "field": "failure_probability",
+    "range": [0.0, 1.0],
+    "interpretation": "Probability of asset failure within defined horizon"
+  },
+  "horizon_days": 30,
+  "training": {
+    "method": "synthetic_data",
+    "note": "Replace with real historical maintenance data in production",
+    "sample_size": 5000
+  }
+}
